@@ -17,12 +17,12 @@ namespace ECommerce.Persistance.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("ProductVersion", "6.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ETrade.Domain.Entities.Customer", b =>
+            modelBuilder.Entity("ECommerce.Domain.Entities.Customer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,7 +43,35 @@ namespace ECommerce.Persistance.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("ETrade.Domain.Entities.Order", b =>
+            modelBuilder.Entity("ECommerce.Domain.Entities.File", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Files");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("File");
+                });
+
+            modelBuilder.Entity("ECommerce.Domain.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -73,7 +101,7 @@ namespace ECommerce.Persistance.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("ETrade.Domain.Entities.Product", b =>
+            modelBuilder.Entity("ECommerce.Domain.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -115,9 +143,26 @@ namespace ECommerce.Persistance.Migrations
                     b.ToTable("OrderProduct");
                 });
 
-            modelBuilder.Entity("ETrade.Domain.Entities.Order", b =>
+            modelBuilder.Entity("ECommerce.Domain.Entities.InvoiceFile", b =>
                 {
-                    b.HasOne("ETrade.Domain.Entities.Customer", "Customer")
+                    b.HasBaseType("ECommerce.Domain.Entities.File");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
+                    b.HasDiscriminator().HasValue("InvoiceFile");
+                });
+
+            modelBuilder.Entity("ECommerce.Domain.Entities.ProductImageFile", b =>
+                {
+                    b.HasBaseType("ECommerce.Domain.Entities.File");
+
+                    b.HasDiscriminator().HasValue("ProductImageFile");
+                });
+
+            modelBuilder.Entity("ECommerce.Domain.Entities.Order", b =>
+                {
+                    b.HasOne("ECommerce.Domain.Entities.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -128,20 +173,20 @@ namespace ECommerce.Persistance.Migrations
 
             modelBuilder.Entity("OrderProduct", b =>
                 {
-                    b.HasOne("ETrade.Domain.Entities.Order", null)
+                    b.HasOne("ECommerce.Domain.Entities.Order", null)
                         .WithMany()
                         .HasForeignKey("OrdersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ETrade.Domain.Entities.Product", null)
+                    b.HasOne("ECommerce.Domain.Entities.Product", null)
                         .WithMany()
                         .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ETrade.Domain.Entities.Customer", b =>
+            modelBuilder.Entity("ECommerce.Domain.Entities.Customer", b =>
                 {
                     b.Navigation("Orders");
                 });
