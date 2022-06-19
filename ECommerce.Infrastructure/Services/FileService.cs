@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ECommerce.Application.Services;
 using ECommerce.Infrastructure.Operations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ECommerce.Infrastructure.Services
 {
-    public class FileService : IFileService
+    public class FileService
     {
 
         private readonly IWebHostEnvironment _webHostEnvironment;

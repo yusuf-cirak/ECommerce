@@ -1,6 +1,8 @@
 using ECommerce.Application.Validators.Products;
 using ECommerce.Infrastructure;
+using ECommerce.Infrastructure.Enums;
 using ECommerce.Infrastructure.Filters;
+using ECommerce.Infrastructure.Services.Storage.Local;
 using ECommerce.Persistance;
 using FluentValidation.AspNetCore;
 
@@ -10,6 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddPersistanceServices(); //
 builder.Services.AddInfrastructureServices(); // 
+
+//builder.Services.AddStorage(StorageType.Local);
+
+builder.Services.AddStorage<LocalStorage>();
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
 // Accept anything from header, accept any method. Only on localhost:4200 and http & https protocol 

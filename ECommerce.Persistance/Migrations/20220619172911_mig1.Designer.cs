@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ECommerce.Persistance.Migrations
 {
     [DbContext(typeof(ETradeDbContext))]
-    [Migration("20220619130230_mig_1")]
-    partial class mig_1
+    [Migration("20220619172911_mig1")]
+    partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -63,6 +63,10 @@ namespace ECommerce.Persistance.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Storage")
                         .IsRequired()
                         .HasColumnType("text");
 
