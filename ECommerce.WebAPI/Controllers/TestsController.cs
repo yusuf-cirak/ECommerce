@@ -99,17 +99,21 @@ namespace ECommerce.WebAPI.Controllers
 
 
         [HttpPost, Route("[action]")]
-        public async Task<IActionResult> Upload()
+        public async Task<IActionResult> Upload(string id)
         {
             var datas=await _storageService.UploadAsync("productimages", Request.Form.Files);
             // _webHostEnvironment.WebRootPath=wwwroot
+
+            Product product = await _productReadRepository.GetByIdAsync(id);
 
             await _productImageFileWriteRepository.AddRangeAsync(datas.Select(d => new ProductImageFile()
             {
                 Path = d.path,
                 FileName = d.fileName,
-                Storage = _storageService.StorageName
+                Storage = _storageService.StorageName,
+                Products = new List<Product>(){product}
             }).ToList());
+
             await _productImageFileWriteRepository.SaveAsync();
             return Ok();
         }

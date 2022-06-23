@@ -16,7 +16,7 @@ builder.Services.AddInfrastructureServices(); //
 
 //builder.Services.AddStorage(StorageType.Local);
 
-builder.Services.AddStorage<AzureStorage>();
+builder.Services.AddStorage<LocalStorage>();
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
 // Accept anything from header, accept any method. Only on localhost:4200 and http & https protocol 
