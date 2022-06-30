@@ -28,7 +28,7 @@ namespace ECommerce.Persistance.Repositories
         //return query;
 
         public async Task<T> GetByIdAsync(string id, bool tracking = true)
-            => tracking ? await Table.FindAsync(id) : await Table.AsNoTracking().FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
+            => tracking ? await Table.FirstOrDefaultAsync(d=>d.Id==Guid.Parse(id)) : await Table.AsNoTracking().FirstOrDefaultAsync(data => data.Id == Guid.Parse(id));
         //var query =  Table.AsQueryable();
         //if (!tracking) query = Table.AsNoTracking();
         //return await query.FirstOrDefaultAsync(p => p.Id == Guid.Parse(id));

@@ -1,3 +1,4 @@
+using ECommerce.Application;
 using ECommerce.Application.Validators.Products;
 using ECommerce.Infrastructure;
 using ECommerce.Infrastructure.Enums;
@@ -13,6 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddPersistanceServices(); //
 builder.Services.AddInfrastructureServices(); // 
+builder.Services.AddApplicationServices(); //
+
 
 //builder.Services.AddStorage(StorageType.Local);
 
