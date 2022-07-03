@@ -41,8 +41,6 @@ namespace ECommerce.WebAPI.Controllers
         }
 
 
-
-
         [HttpPost, Route("createproduct")]
 
         public async Task<IActionResult> CreateProduct(CreateProductCommandRequest request)

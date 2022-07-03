@@ -31,5 +31,6 @@ public class LoginUserCommandHandler:IRequestHandler<LoginUserCommandRequest,Log
             return new();
             // Yetkilerin belirlenmesi gerekiyor.
             throw new UserLoginFailedException();
+
     }
 }

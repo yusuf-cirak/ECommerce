@@ -7,5 +7,6 @@ namespace ECommerce.WebAPI.Controllers
     {
         protected IMediator? Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
         private IMediator? _mediator;
+
     }
 }
