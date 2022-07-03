@@ -21,7 +21,6 @@ public class GetProductImagesQueryHandler:IRequestHandler<GetProductImagesQueryR
         Domain.Entities.Product? product = await _productReadRepository.Table.Include(p => p.ProductImageFiles)
             .FirstOrDefaultAsync(p => p.Id == Guid.Parse(request.Id));
 
-
         return product?.ProductImageFiles.Select(p => new GetProductImagesQueryResponse()
         {
             Path = $"{_configuration["BaseStorageUrl"]}/{p.Path}",

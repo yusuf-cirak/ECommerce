@@ -22,19 +22,13 @@ namespace ECommerce.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TestsController : ControllerBase
+    public class TestsController : BaseController
     {
-         private readonly IMediator _mediator;
-        public TestsController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
 
         [HttpGet, Route("getallproducts")]
         public async Task<IActionResult> GetAllProducts([FromQuery] Pagination pagination)
         {
-            GetAllProductQueryResponse response = await _mediator.Send(new GetAllProductQueryRequest(pagination));
+            GetAllProductQueryResponse response = await Mediator.Send(new GetAllProductQueryRequest(pagination));
             return Ok(response);
         }
 
@@ -42,7 +36,7 @@ namespace ECommerce.WebAPI.Controllers
         [HttpGet, Route("getproductbyid/{Id}")] // prop name'i ile query param matchleşmeli ki bind işlemi yapılsın
         public async Task<IActionResult> GetProductById([FromRoute] GetProductByIdQueryRequest getProductByIdQueryRequest)
         {
-            GetProductByIdQueryResponse response=await _mediator.Send(getProductByIdQueryRequest);
+            GetProductByIdQueryResponse response=await Mediator.Send(getProductByIdQueryRequest);
             return Ok(response);
         }
 
@@ -53,7 +47,7 @@ namespace ECommerce.WebAPI.Controllers
 
         public async Task<IActionResult> CreateProduct(CreateProductCommandRequest request)
         {
-            await _mediator.Send(request);
+            await Mediator.Send(request);
             return StatusCode((int)HttpStatusCode.Created);
         }
 
@@ -61,7 +55,7 @@ namespace ECommerce.WebAPI.Controllers
         [HttpPut, Route("updateproduct")]
         public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductCommandRequest updateProductCommandRequest)
         {
-            await _mediator.Send(updateProductCommandRequest);
+            await Mediator.Send(updateProductCommandRequest);
             return Ok();
         }
 
@@ -70,7 +64,7 @@ namespace ECommerce.WebAPI.Controllers
 
         public async Task<IActionResult> RemoveProduct([FromRoute] RemoveProductCommandRequest removeProductCommandRequest)
         {
-            await _mediator.Send(removeProductCommandRequest);
+            await Mediator.Send(removeProductCommandRequest);
             return Ok();
         }
 
@@ -79,21 +73,21 @@ namespace ECommerce.WebAPI.Controllers
         public async Task<IActionResult> Upload([FromQuery] UploadProductImageCommandRequest uploadProductImageCommandRequest) // id query string olarak gelecek
         {
             uploadProductImageCommandRequest.Files = Request.Form.Files;
-            await _mediator.Send(uploadProductImageCommandRequest);
+            await Mediator.Send(uploadProductImageCommandRequest);
             return Ok();
         }
 
         [HttpGet, Route("[action]/{Id}")]
         public async Task<IActionResult> GetProductImages([FromRoute] GetProductImagesQueryRequest getProductImagesQueryRequest)
         {
-            List<GetProductImagesQueryResponse> response = await _mediator.Send(getProductImagesQueryRequest);
+            List<GetProductImagesQueryResponse> response = await Mediator.Send(getProductImagesQueryRequest);
             return Ok(response);
         }
 
         [HttpDelete("[action]")]
         public async Task<IActionResult> RemoveProductImage([FromRoute] RemoveProductImageCommandRequest removeProductImageCommandRequest)
         {
-            await _mediator.Send(removeProductImageCommandRequest);
+            await Mediator.Send(removeProductImageCommandRequest);
             return Ok();
 
         }

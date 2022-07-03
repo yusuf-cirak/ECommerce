@@ -5,12 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using ECommerce.Domain.Entities;
 using ECommerce.Domain.Entities.Common;
+using ECommerce.Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using File = ECommerce.Domain.Entities.File;
 
 namespace ECommerce.Persistance.Contexts
 {
-    public class ETradeDbContext:DbContext
+    public class ETradeDbContext:IdentityDbContext<AppUser,AppRole,string>
     {
         public ETradeDbContext(DbContextOptions options):base(options)
         {

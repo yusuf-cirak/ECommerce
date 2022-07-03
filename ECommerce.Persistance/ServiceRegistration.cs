@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ECommerce.Application.Repositories;
+using ECommerce.Domain.Entities.Identity;
 using ECommerce.Persistance.Contexts;
 using ECommerce.Persistance.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,17 @@ namespace ECommerce.Persistance
         {
             // Context
             services.AddDbContext<ETradeDbContext>(options => options.UseNpgsql(Configuration.ConnectionString));
+
+            // Identity
+            services.AddIdentity<AppUser, AppRole>(opt =>
+            {
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireDigit = false;
+                opt.Password.RequiredLength = 3;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<ETradeDbContext>();
 
             // Repositories
 
