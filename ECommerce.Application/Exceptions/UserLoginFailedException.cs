@@ -2,7 +2,7 @@
 
 public class UserLoginFailedException : Exception
 {
-    public UserLoginFailedException():base("Kullanıcı adı veya şifre hatalı")
+    public UserLoginFailedException():base("Kullanıcı sistemde bulunamadı")
     {
     }
 

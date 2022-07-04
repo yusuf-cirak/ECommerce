@@ -1,4 +1,6 @@
 ﻿using System.Reflection.Metadata.Ecma335;
+using ECommerce.Application.Abstractions.Token;
+using ECommerce.Application.DTOs;
 using ECommerce.Application.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -9,11 +11,13 @@ public class LoginUserCommandHandler:IRequestHandler<LoginUserCommandRequest,Log
 {
     private readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
     private readonly SignInManager<Domain.Entities.Identity.AppUser> _signInManager;
+    private readonly ITokenHandler _tokenHandler;
 
-    public LoginUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> userManager, SignInManager<Domain.Entities.Identity.AppUser> signInManager)
+    public LoginUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> userManager, SignInManager<Domain.Entities.Identity.AppUser> signInManager, ITokenHandler tokenHandler)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _tokenHandler = tokenHandler;
     }
 
     public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
@@ -27,10 +31,16 @@ public class LoginUserCommandHandler:IRequestHandler<LoginUserCommandRequest,Log
 
         SignInResult result=await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
-        if (result.Succeeded) // Authentication başarılı
-            return new();
-            // Yetkilerin belirlenmesi gerekiyor.
-            throw new UserLoginFailedException();
+        if (result.Succeeded)
+        {
+            Token token = _tokenHandler.CreateAccessToken(expiration: 10);
+            return new ()
+            {
+                Token = token
+            };
+        }
+
+        throw new UserLoginFailedException(message:"Kimlik doğrulama hatası");
 
     }
 }

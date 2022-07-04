@@ -14,6 +14,7 @@ using ECommerce.Application.RequestParameters;
 using ECommerce.Application.ViewModels.Products;
 using ECommerce.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,16 +23,15 @@ namespace ECommerce.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public class TestsController : BaseController
     {
-
         [HttpGet, Route("getallproducts")]
         public async Task<IActionResult> GetAllProducts([FromQuery] Pagination pagination)
         {
             GetAllProductQueryResponse response = await Mediator.Send(new GetAllProductQueryRequest(pagination));
             return Ok(response);
         }
-
 
         [HttpGet, Route("getproductbyid/{Id}")] // prop name'i ile query param matchleşmeli ki bind işlemi yapılsın
         public async Task<IActionResult> GetProductById([FromRoute] GetProductByIdQueryRequest getProductByIdQueryRequest)
@@ -79,7 +79,7 @@ namespace ECommerce.WebAPI.Controllers
         public async Task<IActionResult> GetProductImages([FromRoute] GetProductImagesQueryRequest getProductImagesQueryRequest)
         {
             List<GetProductImagesQueryResponse> response = await Mediator.Send(getProductImagesQueryRequest);
-            return Ok(response);
+            return Ok(response); 
         }
 
         [HttpDelete("[action]")]

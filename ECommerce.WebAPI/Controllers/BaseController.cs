@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using ECommerce.Application.RequestParameters;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.WebAPI.Controllers

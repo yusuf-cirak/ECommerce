@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 
 namespace ECommerce.Infrastructure.Filters
 {
@@ -19,7 +21,6 @@ namespace ECommerce.Infrastructure.Filters
 
                 context.Result = new BadRequestObjectResult(errors);
             }
-
             await next();
         }
     }

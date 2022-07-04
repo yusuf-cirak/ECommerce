@@ -31,7 +31,7 @@ namespace ECommerce.Infrastructure.Services.Storage.Azure
 
             foreach (IFormFile file in files)
             {
-                string fileNewName=await FileRenameAsync(containerName, file.Name,HasFile); // delegate
+                string fileNewName=await FileRenameAsync(containerName, file.FileName,HasFile); // delegate
 
                 BlobClient blobClient =_blobContainerClient.GetBlobClient(fileNewName);
                 await blobClient.UploadAsync(file.OpenReadStream());
