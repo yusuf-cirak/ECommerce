@@ -15,6 +15,8 @@ namespace ECommerce.Application
         {
             services.AddMediatR(typeof(ServiceRegistration));
             //services.AddMediatR(Assembly.GetExecutingAssembly());
+
+            services.AddHttpClient(); // Facebook login için HttpClient gerekli
         }
     }
 }
