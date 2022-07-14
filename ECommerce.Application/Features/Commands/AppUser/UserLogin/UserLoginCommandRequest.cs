@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 
-namespace ECommerce.Application.Features.Commands.AppUser.LoginUser
+namespace ECommerce.Application.Features.Commands.AppUser.UserLogin
 {
-    public class LoginUserCommandRequest:IRequest<LoginUserCommandResponse>
+    public class UserLoginCommandRequest:IRequest<UserLoginCommandResponse>
     {
         public string UsernameOrEmail { get; set; }
         public string Password { get; set; }

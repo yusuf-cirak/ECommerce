@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ECommerce.Application.Abstractions.Services;
+using ECommerce.Application.Abstractions.Services.Authentications;
 using ECommerce.Application.Repositories;
 using ECommerce.Domain.Entities.Identity;
 using ECommerce.Persistance.Contexts;
 using ECommerce.Persistance.Repositories;
+using ECommerce.Persistance.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -49,6 +52,16 @@ namespace ECommerce.Persistance
 
             services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
             services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
+
+
+            services.AddHttpClient(); // facebook login'de http istekleri atılıyor bu yüzden api'ye httpClient eklenmeli.
+
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<IAuthService, AuthService>();
+            //services.AddScoped<IInternalAuthentication, AuthService>();
+            //services.AddScoped<IExternalAuthentication, AuthService>();
+
 
 
 

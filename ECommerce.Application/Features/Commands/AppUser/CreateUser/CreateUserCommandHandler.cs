@@ -1,32 +1,23 @@
-﻿using ECommerce.Application.Exceptions;
+﻿using ECommerce.Application.Abstractions.Services;
+using ECommerce.Application.DTOs.User;
+using ECommerce.Application.Exceptions;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 
 namespace ECommerce.Application.Features.Commands.AppUser.CreateUser;
 
 public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest, CreateUserCommandResponse>
 {
-    private readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
+    private readonly IUserService _userService;
 
-    public CreateUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> userManager)
+    public CreateUserCommandHandler(IUserService userService)
     {
-        _userManager = userManager;
+        _userService = userService;
     }
 
     public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
     {
-        IdentityResult result = await _userManager.CreateAsync(new() //AutoMapper eklenecek
-        {
-            Id = Guid.NewGuid().ToString(),
-            UserName = request.UserName,
-            Email = request.Email,
-            FullName = request.FullName
-        }, request.Password);
-        if (result.Succeeded)
-        {
-            return new() { Succeeded = true, Message = "Kullanıcı başarıyla oluşturuldu" };
-        }
-
+        var response = await _userService.CreateAsync(request);
+        if (response) return new() { Message = "Kullanıcı başarıyla oluşturuldu", Succeeded = true };
         throw new UserCreateFailedException();
     }
 }

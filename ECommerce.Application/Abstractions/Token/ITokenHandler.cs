@@ -8,7 +8,7 @@ namespace ECommerce.Application.Abstractions.Token
 {
     public interface ITokenHandler
     {
-        DTOs.Token CreateAccessToken(int expiration=10);
+        DTOs.Token CreateAccessToken(int expiration);
 
         // todo refresh token eklenecek
     }
