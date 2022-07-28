@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ECommerce.Persistance.Services
 {
-    public class UserService:IUserService
+    public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
 
@@ -30,12 +30,18 @@ namespace ECommerce.Persistance.Services
                 FullName = model.FullName
             }, model.Password);
             return result.Succeeded;
-            //if (result.Succeeded)
-            //{
-            //    return new() { Succeeded = true, Message = "Kullanıcı başarıyla oluşturuldu" };
-            //}
+        }
 
-            //throw new UserCreateFailedException();
+        public async Task UpdateRefreshToken(string refreshToken, AppUser? user, DateTime accessTokenExpiration, int addOnAccessTokenDate)
+        {
+            if (user != null)
+            {
+                user.RefreshToken = refreshToken;
+                user.RefreshTokenEndDate = accessTokenExpiration.AddMinutes(addOnAccessTokenDate);
+                await _userManager.UpdateAsync(user);
+            }
+            else throw new UserNotFoundException();
+
         }
     }
 }

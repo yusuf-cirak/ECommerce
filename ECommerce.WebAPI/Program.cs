@@ -41,7 +41,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     
     ValidAudience = builder.Configuration["Token:Audience"],
     ValidIssuer = builder.Configuration["Token:Issuer"],
-    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]))
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
+    LifetimeValidator = (notBefore,expires,securityToken,validationParameters)=> 
+        // expires!=null?expires>DateTime.UtcNow:false
+        expires != null && expires > DateTime.UtcNow
+    // LifetimeValidator delegate'inin expires parametresi token'ýmýzýn expire süresine sahiptir. Eðer ki expires null ise false dönecektir, diðer þarta bakýlmasýna bile gerek yok. Fakat expires null deðilse yani token'imiz varsa ayný zamanda expires süresinin DateTime.UtcNow'dan büyük olmasý gerekir.
 });
 
 var app = builder.Build();

@@ -13,27 +13,30 @@ using ECommerce.Application.Exceptions;
 using ECommerce.Domain.Entities.Identity;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace ECommerce.Persistance.Services
 {
-    public class AuthService:IAuthService
+    public class AuthService : IAuthService
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenHandler _tokenHandler;
         private readonly SignInManager<AppUser> _signInManager;
-        public AuthService(IHttpClientFactory httpClientFactory, IConfiguration configuration, UserManager<AppUser> userManager, ITokenHandler tokenHandler, SignInManager<AppUser> signInManager)
+        private readonly IUserService _userService;
+        public AuthService(IHttpClientFactory httpClientFactory, IConfiguration configuration, UserManager<AppUser> userManager, ITokenHandler tokenHandler, SignInManager<AppUser> signInManager, IUserService userService)
         {
             _configuration = configuration; // to access secrets.json
             _userManager = userManager;
             _tokenHandler = tokenHandler;
             _signInManager = signInManager;
+            _userService = userService;
             _httpClient = httpClientFactory.CreateClient(); // for http requests
         }
 
-        private async Task<Token> CreateUserExternalAsync(string providerName,string userId,string email,string name,int accessTokenLifeTime)
+        private async Task<Token> CreateUserExternalAsync(string providerName, string userId, string email, string name, int accessTokenLifeTime)
         {
             var info = new UserLoginInfo(providerName, userId, providerName);
             // AspNetLoginUsers tablosu dış kaynaktan bize gelen Login'leri kaydettiğimiz tablodur.
@@ -58,12 +61,15 @@ namespace ECommerce.Persistance.Services
                 }
             }
 
-            if (result) // Eğer kullanıcı başarıyla AspNetUsers'a kaydedildiyse ya da veri tabanında bulunduysa
-                await _userManager.AddLoginAsync(user, info);
-            else
-                throw new Exception("Invalid external authentication");
+            if (result)
+            {
+                await _userManager.AddLoginAsync(user, info); //AspNetUserLogins
 
-            return _tokenHandler.CreateAccessToken(accessTokenLifeTime);
+                Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime);
+                await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, addOnAccessTokenDate: accessTokenLifeTime);
+                return token;
+            }
+            throw new Exception("Invalid external authentication.");
         }
 
         public async Task<Token> FacebookLoginAsync(string authToken, int accessTokenLifeTime)
@@ -127,11 +133,27 @@ namespace ECommerce.Persistance.Services
             SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
 
             if (result.Succeeded)
-                return _tokenHandler.CreateAccessToken(accessTokenLifeTime);
+            {
+                Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime);
+               await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, addOnAccessTokenDate:accessTokenLifeTime);
+                return token;
+            }
+
             throw new UserLoginFailedException(message: "Kimlik doğrulama hatası");
         }
 
+        public async Task<Token> RefreshTokenLoginAsync(string refreshToken,int accessTokenLifeTime)
+        {
+           AppUser? user= await _userManager.Users.FirstOrDefaultAsync(u=>u.RefreshToken==refreshToken);
 
-
+           if (user!=null && user.RefreshTokenEndDate>DateTime.UtcNow)
+           {
+               Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime);
+              await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, addOnAccessTokenDate:accessTokenLifeTime);
+              // addOnAccessTokenDate parametresi refreshToken'ı accessToken'ın 2 katı yapacak.
+              return token;
+           }
+           throw new UserNotFoundException();
+        }
     }
 }

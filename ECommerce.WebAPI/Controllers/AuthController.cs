@@ -1,5 +1,6 @@
 ﻿using ECommerce.Application.Features.Commands.AppUser.FacebookLogin;
 using ECommerce.Application.Features.Commands.AppUser.GoogleLogin;
+using ECommerce.Application.Features.Commands.AppUser.RefreshTokenLogin;
 using ECommerce.Application.Features.Commands.AppUser.UserLogin;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +29,14 @@ namespace ECommerce.WebAPI.Controllers
             facebookLoginCommandRequest)
         {
             FacebookLoginCommandResponse response = await Mediator.Send(facebookLoginCommandRequest);
+            return Ok(response);
+        }
+        
+        [HttpPost("[action]")]
+        public async Task<IActionResult> RefreshTokenLogin([FromBody] RefreshTokenLoginCommandRequest
+            refreshTokenLoginCommandRequest)
+        {
+            RefreshTokenLoginCommandResponse response = await Mediator.Send(refreshTokenLoginCommandRequest);
             return Ok(response);
         }
     }

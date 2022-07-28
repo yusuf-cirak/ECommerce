@@ -10,6 +10,7 @@ namespace ECommerce.Application.Abstractions.Token
     {
         DTOs.Token CreateAccessToken(int expiration);
 
-        // todo refresh token eklenecek
+        string CreateRefreshToken();
+        
     }
 }
