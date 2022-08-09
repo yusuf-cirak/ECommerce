@@ -36,6 +36,7 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.Wi
 Logger log = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("logs/log.txt")
+    .WriteTo.Seq(builder.Configuration["Seq:ServerUrl"])
     .WriteTo.PostgreSQL(builder.Configuration.GetConnectionString("PostgreSQL")
         ,"Logs"
         ,needAutoCreateTable:true
@@ -90,7 +91,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseStaticFiles();
 
-app.UseSerilogRequestLogging();
+app.UseSerilogRequestLogging(); //
 
 app.UseCors(); // cors middleware used
 
