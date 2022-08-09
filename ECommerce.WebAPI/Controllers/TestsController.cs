@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Drawing;
+using System.Net;
 using Azure.Core;
 using ECommerce.Application.Abstractions.Storage;
 using ECommerce.Application.Features.Commands.Product.CreateProduct;

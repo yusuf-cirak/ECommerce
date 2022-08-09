@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using ECommerce.Application.Abstractions.Token;
+using ECommerce.Domain.Entities.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -20,7 +22,7 @@ namespace ECommerce.Infrastructure.Services.Token
             _configuration = configuration;
         }
 
-        public Application.DTOs.Token CreateAccessToken(int expiration)
+        public Application.DTOs.Token CreateAccessToken(int expiration,AppUser appUser)
         {
             Application.DTOs.Token token = new();
 
@@ -39,7 +41,8 @@ namespace ECommerce.Infrastructure.Services.Token
                 issuer: _configuration["Token:Issuer"],
                 expires:token.Expiration,
                 notBefore:DateTime.UtcNow, // Expire ne zaman devreye girsin? Token üretildiği anda
-                signingCredentials:signingCredentials
+                signingCredentials:signingCredentials,
+                claims:new List<Claim>{new(ClaimTypes.Name,appUser.UserName)}
             );
 
             // Token oluşturucu sınıfından bir örnek alalım

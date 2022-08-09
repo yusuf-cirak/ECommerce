@@ -65,7 +65,7 @@ namespace ECommerce.Persistance.Services
             {
                 await _userManager.AddLoginAsync(user, info); //AspNetUserLogins
 
-                Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime);
+                Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime,user);
                 await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, addOnAccessTokenDate: accessTokenLifeTime);
                 return token;
             }
@@ -134,7 +134,7 @@ namespace ECommerce.Persistance.Services
 
             if (result.Succeeded)
             {
-                Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime);
+                Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime,user);
                await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, addOnAccessTokenDate:accessTokenLifeTime);
                 return token;
             }
@@ -148,7 +148,7 @@ namespace ECommerce.Persistance.Services
 
            if (user!=null && user.RefreshTokenEndDate>DateTime.UtcNow)
            {
-               Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime);
+               Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime,user);
               await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, addOnAccessTokenDate:accessTokenLifeTime);
               // addOnAccessTokenDate parametresi refreshToken'ı accessToken'ın 2 katı yapacak.
               return token;
