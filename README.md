@@ -14,3 +14,7 @@ E-Commerce project backend built with .NET and Onion Architecture
 ## ⚖️ License
 
 Distributed under the MIT License. See [MIT](https://choosealicense.com/licenses/mit/) for more information.
+
+## 🙏 Acknowledgements
+
+ - [Gençay Yıldız](https://www.linkedin.com/in/gen%C3%A7ay-y%C4%B1ld%C4%B1z-a1453987/)
