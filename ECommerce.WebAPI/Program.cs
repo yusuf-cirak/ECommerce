@@ -7,6 +7,7 @@ using ECommerce.Infrastructure.Filters;
 using ECommerce.Infrastructure.Services.Storage.Azure;
 using ECommerce.Infrastructure.Services.Storage.Local;
 using ECommerce.Persistance;
+using ECommerce.SignalR;
 using ECommerce.WebAPI.Configurations.ColumnWriters;
 using ECommerce.WebAPI.Extensions;
 using FluentValidation.AspNetCore;
@@ -24,13 +25,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationServices(); //
 builder.Services.AddInfrastructureServices(); // 
 builder.Services.AddPersistanceServices(); //
+builder.Services.AddSignalRServices(); // 
 
 
 //builder.Services.AddStorage(StorageType.Local);
 
 builder.Services.AddStorage<AzureStorage>();
 
-builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod()));
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
 // Accept anything from header, accept any method. Only on localhost:4200 and http & https protocol 
 
 // Logging
@@ -113,5 +115,7 @@ app.Use(async (context, next) =>
 });
 
 app.MapControllers();
+
+app.MapHubs(); // 
 
 app.Run();
