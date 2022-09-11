@@ -15,5 +15,7 @@ namespace ECommerce.Domain.Entities
         public ICollection<Order> Orders { get; set; } // Bir ürünün birden fazla siparişi olabilir. Çoka çok ilişki.
         
         public ICollection<ProductImageFile> ProductImageFiles { get; set; }
+
+        public ICollection<BasketItem> BasketItems { get; set; }
     }
 }

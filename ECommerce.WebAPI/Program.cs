@@ -1,4 +1,4 @@
-using System.Security.Claims;
+ï»¿using System.Security.Claims;
 using System.Text;
 using ECommerce.Application;
 using ECommerce.Application.Validators.Products;
@@ -21,6 +21,7 @@ using Serilog.Sinks.PostgreSQL;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddHttpContextAccessor(); //Client'tan gelen request neticvesinde oluÃ¾turulan HttpContext nesnesine katmanlardaki class'lar Ã¼zerinden(busineess logic) eriÃ¾ebilmemizi saÃ°layan bir servistir.
 
 builder.Services.AddApplicationServices(); //
 builder.Services.AddInfrastructureServices(); // 
@@ -67,10 +68,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer("Admin",opt => opt.TokenValidationParameters = new()
 {
-    ValidateAudience = true, // Oluşturulacak token değerini kimlerin/hangi originlerin/sitelerin kullanacağını belirttiğimiz değerdir. -> www.bilmemne.com
-    ValidateIssuer = true, // Oluşturulacak token değerini kimin dağıttığını ifade ettiğimiz alandır. -> www.myapi.com
-    ValidateLifetime = true, // Oluşturulan token değerinin süresini kontrol eden yapıdır.
-    ValidateIssuerSigningKey = true, // Üretilecek token değerinin uygulamamıza ait olduğunu belirten bir security key verisinin doğrulanmasıdır.
+    ValidateAudience = true, // OluÅŸturulacak token deÄŸerini kimlerin/hangi originlerin/sitelerin kullanacaÄŸÄ±nÄ± belirttiÄŸimiz deÄŸerdir. -> www.bilmemne.com
+    ValidateIssuer = true, // OluÅŸturulacak token deÄŸerini kimin daÄŸÄ±ttÄ±ÄŸÄ±nÄ± ifade ettiÄŸimiz alandÄ±r. -> www.myapi.com
+    ValidateLifetime = true, // OluÅŸturulan token deÄŸerinin sÃ¼resini kontrol eden yapÄ±dÄ±r.
+    ValidateIssuerSigningKey = true, // Ãœretilecek token deÄŸerinin uygulamamÄ±za ait olduÄŸunu belirten bir security key verisinin doÄŸrulanmasÄ±dÄ±r.
     
     ValidAudience = builder.Configuration["Token:Audience"],
     ValidIssuer = builder.Configuration["Token:Issuer"],
@@ -78,9 +79,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     LifetimeValidator = (notBefore,expires,securityToken,validationParameters)=> 
         // expires!=null?expires>DateTime.UtcNow:false
         expires != null && expires > DateTime.UtcNow,
-    // LifetimeValidator delegate'inin expires parametresi token'ımızın expire süresine sahiptir. Eğer ki expires null ise false dönecektir, diğer şarta bakılmasına bile gerek yok. Fakat expires null değilse yani token'imiz varsa aynı zamanda expires süresinin DateTime.UtcNow'dan büyük olması gerekir.
+    // LifetimeValidator delegate'inin expires parametresi token'Ä±mÄ±zÄ±n expire sÃ¼resine sahiptir. EÄŸer ki expires null ise false dÃ¶necektir, diÄŸer ÅŸarta bakÄ±lmasÄ±na bile gerek yok. Fakat expires null deÄŸilse yani token'imiz varsa aynÄ± zamanda expires sÃ¼resinin DateTime.UtcNow'dan bÃ¼yÃ¼k olmasÄ± gerekir.
 
-    NameClaimType = ClaimTypes.Name // Jwt üzerinde Name claimine karşılık gelen değeri User.Identity.Name propertysinden elde edebiliriz.
+    NameClaimType = ClaimTypes.Name // Jwt Ã¼zerinde Name claimine karÅŸÄ±lÄ±k gelen deÄŸeri User.Identity.Name propertysinden elde edebiliriz.
     
 });
 

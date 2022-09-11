@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 using ECommerce.Application.Abstractions.Services;
 using ECommerce.Application.Abstractions.Services.Authentications;
 using ECommerce.Application.Repositories;
+using ECommerce.Application.Repositories.Basket;
+using ECommerce.Application.Repositories.BasketItem;
 using ECommerce.Domain.Entities.Identity;
 using ECommerce.Persistance.Contexts;
 using ECommerce.Persistance.Repositories;
+using ECommerce.Persistance.Repositories.Basket;
+using ECommerce.Persistance.Repositories.BasketItem;
 using ECommerce.Persistance.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,12 +57,22 @@ namespace ECommerce.Persistance
             services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
             services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
 
+            services.AddScoped<IBasketReadRepository, BasketReadRepository>();
+            services.AddScoped<IBasketWriteRepository, BasketWriteRepository>();
+
+            services.AddScoped<IBasketItemReadRepository, BasketItemReadRepository>();
+            services.AddScoped<IBasketItemWriteRepository, BasketItemWriteRepository>();
+
+
 
             services.AddHttpClient(); // facebook login'de http istekleri atılıyor bu yüzden api'ye httpClient eklenmeli.
 
             services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IAuthService, AuthService>();
+
+            services.AddScoped<IBasketService, BasketService>();
+
             //services.AddScoped<IInternalAuthentication, AuthService>();
             //services.AddScoped<IExternalAuthentication, AuthService>();
 

@@ -11,5 +11,6 @@ public class Order : BaseEntity
     public ICollection<Product> Products { get; set; } // Bir siparişte birden fazla ürün olabilir. Çoka çok ilişki (n to n)
 
     public Customer Customer { get; set; }
+    public Basket Basket { get; set; }
 
 }
