@@ -25,7 +25,6 @@ namespace ECommerce.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = "Admin")]
     public class TestsController : BaseController
     {
         [HttpGet, Route("getallproducts")]

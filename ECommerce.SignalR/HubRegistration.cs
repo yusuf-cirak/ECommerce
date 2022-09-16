@@ -13,6 +13,8 @@ namespace ECommerce.SignalR
         public static void MapHubs(this WebApplication app)
         {
             app.MapHub<ProductHub>("/products-hub"); // Product ile ilgili socket işlemlerini üstlenecek route
+
+            app.MapHub<OrderHub>("/orders-hub");
         }
     }
 }

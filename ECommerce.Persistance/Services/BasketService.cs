@@ -133,5 +133,15 @@ namespace ECommerce.Persistance.Services
                 await _basketItemWriteRepository.SaveAsync();
             }
         }
+
+
+        public Basket? GetUserActiveBasket
+        {
+            get
+            {
+                Basket? basket = ContextUser().Result;
+                return basket;
+            }
+        }
     }
 }
