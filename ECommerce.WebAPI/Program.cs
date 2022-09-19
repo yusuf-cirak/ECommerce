@@ -16,7 +16,6 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Context;
 using Serilog.Core;
-using Serilog.Sinks.PostgreSQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,20 +40,20 @@ Logger log = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("logs/log.txt")
     .WriteTo.Seq(builder.Configuration["Seq:ServerUrl"])
-    .WriteTo.PostgreSQL(builder.Configuration.GetConnectionString("PostgreSQL")
-        ,"Logs"
-        ,needAutoCreateTable:true
-        ,columnOptions:new Dictionary<string, ColumnWriterBase>()
-        {
-            {"message",new RenderedMessageColumnWriter()},
-            {"message_template",new MessageTemplateColumnWriter()},
-            {"level",new LevelColumnWriter()},
-            {"time_stamp",new TimestampColumnWriter()},
-            {"exception",new ExceptionColumnWriter()},
-            {"log_event",new LogEventSerializedColumnWriter()},
-            {"user_name",new UserNameColumnWriter()} // Custom ColumnWriter
-        }
-    )
+    //.WriteTo.PostgreSQL(builder.Configuration.GetConnectionString("PostgreSQL")
+    //    ,"Logs"
+    //    ,needAutoCreateTable:true
+    //    ,columnOptions:new Dictionary<string, ColumnWriterBase>()
+    //    {
+    //        {"message",new RenderedMessageColumnWriter()},
+    //        {"message_template",new MessageTemplateColumnWriter()},
+    //        {"level",new LevelColumnWriter()},
+    //        {"time_stamp",new TimestampColumnWriter()},
+    //        {"exception",new ExceptionColumnWriter()},
+    //        {"log_event",new LogEventSerializedColumnWriter()},
+    //        {"user_name",new UserNameColumnWriter()} // Custom ColumnWriter
+    //    }
+    //)
     .Enrich.FromLogContext()
     .MinimumLevel.Information()
     .CreateLogger();
