@@ -35,8 +35,11 @@ namespace ECommerce.Persistance.Contexts
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Order>()
-                .HasKey(o => o.Id);
+            builder.Entity<Order>(a =>
+            {
+                a.HasKey(o => o.Id);
+                a.HasIndex(o => o.OrderCode).IsUnique(true);
+            });
 
             builder.Entity<Basket>()
                 .HasOne(b => b.Order)

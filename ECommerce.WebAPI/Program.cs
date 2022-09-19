@@ -5,7 +5,6 @@ using ECommerce.Application.Validators.Products;
 using ECommerce.Infrastructure;
 using ECommerce.Infrastructure.Filters;
 using ECommerce.Infrastructure.Services.Storage.Azure;
-using ECommerce.Infrastructure.Services.Storage.Local;
 using ECommerce.Persistance;
 using ECommerce.SignalR;
 using ECommerce.WebAPI.Configurations.ColumnWriters;
