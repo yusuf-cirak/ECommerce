@@ -12,5 +12,7 @@ namespace ECommerce.Application.Abstractions.Services
         Task CreateOrderAsync(CreateOrder createOrder);
         Task<ListOrder> GetAllOrdersAsync(int page,int size);
 
+        Task<GetOrder> GetOrderById(string id);
+
     }
 }

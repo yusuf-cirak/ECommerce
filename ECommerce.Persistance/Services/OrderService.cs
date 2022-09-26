@@ -50,6 +50,7 @@ namespace ECommerce.Persistance.Services
                  TotalOrderCount = await data.CountAsync(),
                  Orders = await data.Select(e => new
                  {
+                     Id=e.Id,
                      CreatedDate=e.CreatedTime,
                      UserName=e.Basket.User.FullName,
                      TotalPrice=e.Basket.BasketItems.Sum(e=>e.Product.Price*e.Quantity),
@@ -57,6 +58,29 @@ namespace ECommerce.Persistance.Services
                  }).ToListAsync()
              };
 
+        }
+
+        public async Task<GetOrder> GetOrderById(string id)
+        {
+            Order? order = await _orderReadRepository.Table.AsNoTracking()
+                 .Include(o => o.Basket)
+                 .ThenInclude(b => b.BasketItems)
+                 .ThenInclude(bi => bi.Product)
+                 .FirstOrDefaultAsync(o => o.Id == Guid.Parse(id));
+            return new GetOrder
+            {
+                Id=order.Id.ToString(),
+                Address=order.Address,
+                Description=order.Description,
+                OrderCode=order.OrderCode,
+                BasketItems = order.Basket.BasketItems.Select(bi =>new
+                {
+                    bi.Product.Name,
+                    bi.Product.Price,
+                    bi.Quantity
+                }),
+                CreatedDate=order.CreatedTime
+            };
         }
 
         private string GenerateOrderCode()

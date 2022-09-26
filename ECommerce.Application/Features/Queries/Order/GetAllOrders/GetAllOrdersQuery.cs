@@ -7,7 +7,7 @@ using ECommerce.Application.Abstractions.Services;
 using ECommerce.Application.Repositories;
 using MediatR;
 
-namespace ECommerce.Application.Features.Queries.Order
+namespace ECommerce.Application.Features.Queries.Order.GetAllOrders
 {
     public sealed class GetAllOrdersQueryRequest : IRequest<GetAllOrdersQueryResponse>
     {
@@ -26,10 +26,10 @@ namespace ECommerce.Application.Features.Queries.Order
 
         public async Task<GetAllOrdersQueryResponse> Handle(GetAllOrdersQueryRequest request, CancellationToken cancellationToken)
         {
-            var listOrder = await _orderService.GetAllOrdersAsync(request.Page,request.Size);
+            var listOrder = await _orderService.GetAllOrdersAsync(request.Page, request.Size);
 
 
-            return new() { Orders = listOrder.Orders,TotalOrderCount = listOrder.TotalOrderCount};
+            return new() { Orders = listOrder.Orders, TotalOrderCount = listOrder.TotalOrderCount };
         }
     }
 
