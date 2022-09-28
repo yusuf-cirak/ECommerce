@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ECommerce.Application.Abstractions.Services;
 using ECommerce.Application.Abstractions.Storage;
 using ECommerce.Application.Abstractions.Token;
 using ECommerce.Infrastructure.Enums;
@@ -20,7 +21,11 @@ namespace ECommerce.Infrastructure
         public static void AddInfrastructureServices(this IServiceCollection services)
         {
             services.AddScoped<IStorageService,StorageService>();
+
             services.AddScoped<ITokenHandler, TokenHandler>();
+
+            services.AddScoped<IMailService, MailService>();
+
 
         }
 
