@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Application.Exceptions
 {
-    public class UserCreateFailedException:Exception
+    public sealed class UserCreateFailedException:Exception
     {
         public UserCreateFailedException():base("Kullanıcı oluşturulurken beklenmedik bir hatayla karşılaşıldı")
         {

@@ -10,15 +10,17 @@ using ECommerce.Application.Abstractions.Token;
 using ECommerce.Application.DTOs;
 using ECommerce.Application.DTOs.Facebook;
 using ECommerce.Application.Exceptions;
+using ECommerce.Application.Helpers;
 using ECommerce.Domain.Entities.Identity;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace ECommerce.Persistance.Services
 {
-    public class AuthService : IAuthService
+    public sealed class AuthService : IAuthService
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
@@ -26,13 +28,15 @@ namespace ECommerce.Persistance.Services
         private readonly ITokenHandler _tokenHandler;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IUserService _userService;
-        public AuthService(IHttpClientFactory httpClientFactory, IConfiguration configuration, UserManager<AppUser> userManager, ITokenHandler tokenHandler, SignInManager<AppUser> signInManager, IUserService userService)
+        private readonly IMailService _mailService;
+        public AuthService(IHttpClientFactory httpClientFactory, IConfiguration configuration, UserManager<AppUser> userManager, ITokenHandler tokenHandler, SignInManager<AppUser> signInManager, IUserService userService, IMailService mailService)
         {
             _configuration = configuration; // to access secrets.json
             _userManager = userManager;
             _tokenHandler = tokenHandler;
             _signInManager = signInManager;
             _userService = userService;
+            _mailService = mailService;
             _httpClient = httpClientFactory.CreateClient(); // for http requests
         }
 
@@ -107,6 +111,46 @@ namespace ECommerce.Persistance.Services
             }
             throw new Exception("Invalid external authentication");
         }
+
+        public async Task ResetPasswordAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user !=null)
+            {
+                string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                // var tokenBytes = Encoding.UTF8.GetBytes(resetToken);
+                //
+                // resetToken = WebEncoders.Base64UrlEncode(tokenBytes);
+                resetToken = resetToken.EncodeUrl();
+
+                await _mailService.SendPasswordResetMailAsync(email, user.Id, resetToken);
+            }
+            
+            // If user does no exist we dont want to inform client
+        }
+
+        public async Task<bool> VerifyResetTokenAsync(string resetToken,string userId)
+        {
+            AppUser user = await _userManager.FindByIdAsync(userId);
+            if (user is not null)
+            {
+                // var tokenBytes = WebEncoders.Base64UrlDecode(resetToken);
+                //
+                // resetToken = Encoding.UTF8.GetString(tokenBytes);
+
+                resetToken = resetToken.DecodeUrl();
+
+               await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider,
+                    "ResetPassword", resetToken);
+
+               return true;
+            }
+
+            return false;
+        }
+
+        
 
         public async Task<Token> GoogleLoginAsync(string idToken, int accessTokenLifeTime)
         {

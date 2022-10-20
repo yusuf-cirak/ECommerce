@@ -14,6 +14,7 @@ using ECommerce.Persistance.Repositories;
 using ECommerce.Persistance.Repositories.Basket;
 using ECommerce.Persistance.Repositories.BasketItem;
 using ECommerce.Persistance.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -35,7 +36,8 @@ namespace ECommerce.Persistance
                 opt.Password.RequiredLength = 3;
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.User.RequireUniqueEmail = true;
-            }).AddEntityFrameworkStores<ETradeDbContext>();
+            }).AddEntityFrameworkStores<ETradeDbContext>()
+                .AddDefaultTokenProviders();
 
             // Repositories
 

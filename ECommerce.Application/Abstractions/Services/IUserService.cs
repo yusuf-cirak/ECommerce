@@ -12,5 +12,7 @@ namespace ECommerce.Application.Abstractions.Services
     {
         Task<bool> CreateAsync(CreateUser model);
         Task UpdateRefreshToken(string refreshToken, AppUser? user, DateTime accessTokenExpiration, int addOnAccessTokenDate);
+
+        Task UpdatePassword(string userId, string resetToken, string newPassword);
     }
 }
