@@ -14,7 +14,7 @@ namespace ECommerce.Application.Abstractions.Services
 
         Task<GetOrder> GetOrderById(string id);
 
-        Task CompleteOrderAsync(string id);
+       Task<(bool, CompletedOrderDto)> CompleteOrderAsync(string id);
 
     }
 }
