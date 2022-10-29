@@ -22,4 +22,21 @@ namespace ECommerce.Application.Exceptions
             
         }
     }
+    
+    public sealed class OrderNotFoundException:Exception
+    {
+        public OrderNotFoundException():base("Sipariş bilgisi bulunamadı")
+        {
+            
+        }
+
+        public OrderNotFoundException(string? message):base(message)
+        {
+        }
+
+        public OrderNotFoundException(string? message,Exception? innerException):base(message,innerException)
+        {
+            
+        }
+    }
 }

@@ -34,7 +34,8 @@ namespace ECommerce.Application.Features.Queries.Order.GetOrderById
                 OrderCode = getOrder.OrderCode,
                 BasketItems = getOrder.BasketItems,
                 Description = getOrder.Description,
-                CreatedDate = getOrder.CreatedDate
+                CreatedDate = getOrder.CreatedDate,
+                Completed = getOrder.Completed
             };
         }
     }

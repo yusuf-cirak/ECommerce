@@ -20,4 +20,8 @@
     <ProjectReference Include="..\ECommerce.Domain\ECommerce.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Queries\CompletedOrder" />
+  </ItemGroup>
+
 </Project>

@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ECommerce.Application.Features.Commands.CompletedOrder.Create;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.WebAPI.Controllers;
 
-public class CompleteOrdersController : Controller
+[Route("api/[controller]")]
+[ApiController]
+public class CompleteOrdersController : BaseController
 {
-    // GET
-    public IActionResult Index()
+    [HttpGet]
+    public async Task<IActionResult> CompleteOrder([FromRoute]CreateCompletedOrderCommandRequest request)
     {
-        return View();
+        bool response = await Mediator.Send(request);
+        return Ok(response.ToString());
     }
 }

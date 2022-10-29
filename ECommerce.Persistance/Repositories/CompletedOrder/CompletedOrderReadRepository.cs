@@ -1,6 +1,11 @@
-﻿namespace ECommerce.Persistance.Repositories.CompletedOrder;
+﻿using ECommerce.Application.Repositories.CompletedOrder;
+using ECommerce.Persistance.Contexts;
 
-public class CompletedOrderReadRepository
+namespace ECommerce.Persistance.Repositories.CompletedOrder;
+
+public sealed class CompletedOrderReadRepository:ReadRepository<Domain.Entities.CompletedOrder>,ICompletedOrderReadRepository
 {
-    
+    public CompletedOrderReadRepository(ETradeDbContext context) : base(context)
+    {
+    }
 }

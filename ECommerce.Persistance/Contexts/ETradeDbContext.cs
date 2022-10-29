@@ -33,6 +33,8 @@ namespace ECommerce.Persistance.Contexts
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
 
+        public DbSet<CompletedOrder> CompletedOrders { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Order>(a =>
@@ -45,6 +47,8 @@ namespace ECommerce.Persistance.Contexts
                 .HasOne(b => b.Order)
                 .WithOne(o => o.Basket)
                 .HasForeignKey<Order>(o => o.Id);
+
+            builder.Entity<CompletedOrder>().HasOne(co => co.Order).WithOne(o => o.CompletedOrder).HasForeignKey<CompletedOrder>(co=>co.OrderId);
 
             base.OnModelCreating(builder); // IdentityDbContext gibi context'ler kullandığımız zaman base'deki OnModelCreating'i de çalıştırmalıyız.
         }

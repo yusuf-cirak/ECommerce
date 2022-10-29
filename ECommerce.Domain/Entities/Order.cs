@@ -10,5 +10,6 @@ public class Order : BaseEntity
 
 
     public Basket Basket { get; set; }
+    public CompletedOrder CompletedOrder { get; set; }
 
 }

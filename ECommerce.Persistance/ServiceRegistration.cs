@@ -8,11 +8,13 @@ using ECommerce.Application.Abstractions.Services.Authentications;
 using ECommerce.Application.Repositories;
 using ECommerce.Application.Repositories.Basket;
 using ECommerce.Application.Repositories.BasketItem;
+using ECommerce.Application.Repositories.CompletedOrder;
 using ECommerce.Domain.Entities.Identity;
 using ECommerce.Persistance.Contexts;
 using ECommerce.Persistance.Repositories;
 using ECommerce.Persistance.Repositories.Basket;
 using ECommerce.Persistance.Repositories.BasketItem;
+using ECommerce.Persistance.Repositories.CompletedOrder;
 using ECommerce.Persistance.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -64,6 +66,9 @@ namespace ECommerce.Persistance
 
             services.AddScoped<IBasketItemReadRepository, BasketItemReadRepository>();
             services.AddScoped<IBasketItemWriteRepository, BasketItemWriteRepository>();
+            
+            services.AddScoped<ICompletedOrderReadRepository, CompletedOrderReadRepository>();
+            services.AddScoped<ICompletedOrderWriteRepository, CompletedOrderWriteRepository>();
 
 
 

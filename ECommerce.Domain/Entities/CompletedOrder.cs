@@ -1,6 +1,9 @@
-﻿namespace ECommerce.Domain.Entities;
+﻿using ECommerce.Domain.Entities.Common;
 
-public class CompletedOrder
+namespace ECommerce.Domain.Entities;
+
+public class CompletedOrder:BaseEntity
 {
-    
+    public Guid OrderId { get; set; }
+    public Order Order { get; set; }
 }
